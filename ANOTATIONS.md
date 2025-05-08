@@ -105,3 +105,52 @@
     }
     ```
 3. **Histórico de Navegação:** Embora as SPAs gerenciem o histórico de navegação é importante se atentar a configuração do comportamento de voltar e avançar. O React Router já cuida muito bem disso.
+
+## Usando Emotion: Substituto do Styled Components
+
+### Instalação:
+```npm install @emotion/react @emotion/styled```
+
+### Exemplo de uso
+
+1. Usando a propriedade "css": Aplicando estilo diretamente no HTML;
+``` 
+    import React from 'react';
+    import { css } from '@emotion/react';
+    
+    function MyComponent() {
+      return (
+        <div
+          css={css`
+            background-color: lightblue;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+          `}
+        >
+          This is a styled div.
+        </div>
+      );
+    }
+```
+2. Styled Components: Criação de componentes rereutilizáveis com estilo pré-definido;
+```
+    import React from 'react';
+    import styled from '@emotion/styled';
+    
+    const StyledButton = styled.button`
+      background-color: lightgreen;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    
+      &:hover {
+        background-color: darkgreen;
+      }
+    `;
+    
+    function MyButton() {
+      return <StyledButton>Click me</StyledButton>;
+    }
+```
