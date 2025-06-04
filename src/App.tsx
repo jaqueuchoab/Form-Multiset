@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Configuração necessária para que o lazy aconteça
 const FormMultiset = lazy(
-  () => import('./components/form-multiset/FormMultiset'),
+  () => import('./components/formMultiset/FormMultiset'),
 );
 const SendData = lazy(() => import('./components/sendData/SendData'));
 
