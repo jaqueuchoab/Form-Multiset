@@ -8,8 +8,18 @@ import {
   containerButton,
   buttonStyle,
 } from './style/constFormStyles';
-// Importando o InputMask
-import InputMask from 'react-input-mask';
+// useForm gerência os forms e o Controller lida com inputs customizados que não são nativos do HTML
+import { useForm, Controller } from 'react-hook-form';
+// InputMask da lib com atualizações que rodam no React +18
+import InputMask from 'react-input-mask-next';
+
+// Type para os dados do form
+type FormData = {
+  name: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
 
 
 const FormMultiset = () => {
@@ -19,7 +29,7 @@ const FormMultiset = () => {
   );
 
   // Estado que guarda os dados dos inputs
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = React.useState<FormData>({
     name: '',
     lastName: '',
     email: '',
@@ -39,6 +49,16 @@ const FormMultiset = () => {
    // Verifica se todos os campos necessários estão preenchidos para habilitar o botão de submissão
    const isReadyToSubmit = formData.name !== '' && formData.lastName !== '' && formData.email !== '' && formData.phone !== '' && displayForm === 'contact';
 
+   // Função chamada para submissão dos dados
+   const onSubmit = (data: FormData) => {
+    console.log('Dados enviados:', data);
+  };
+
+  // inicializando o react-hook-form para atender aos tipos, a cara que meus dados terão
+  const { control, handleSubmit } = useForm<FormData>();
+
+
+  // Parei aqui, tenho que modificar os containers para <form> 
   return (
     <div css={containerForm}>
       <div css={formStyle}>
@@ -85,8 +105,18 @@ const FormMultiset = () => {
               type="e-mail"
               placeholder="Email"
             />
-            <InputMask>
-            </InputMask>
+            <input
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  phone: e.target.value,
+                }))
+              }
+              css={inputStyle}
+              type="text"
+              placeholder="Telefone"
+            />
           </>
         )}
       </div>
