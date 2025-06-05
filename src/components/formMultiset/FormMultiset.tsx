@@ -8,6 +8,9 @@ import {
   containerButton,
   buttonStyle,
 } from './style/constFormStyles';
+// Importando o InputMask
+import InputMask from 'react-input-mask';
+
 
 const FormMultiset = () => {
   // Estado que controla quais campos serão mostrados no componente
@@ -82,18 +85,8 @@ const FormMultiset = () => {
               type="e-mail"
               placeholder="Email"
             />
-            <input
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  phone: e.target.value,
-                }))
-              }
-              css={inputStyle}
-              type="text"
-              placeholder="Telefone"
-            />
+            <InputMask>
+            </InputMask>
           </>
         )}
       </div>
