@@ -154,3 +154,112 @@
       return <StyledButton>Click me</StyledButton>;
     }
 ```
+
+#### Desenvolvimento do Componente
+
+> Bibliotecas utilizadas, para que servem, quais benefícios? Dicas e aprendizados na implementação
+
+1. Lib: `react-hook-form`
+> Facilta o controle de formulários com foco em: 
+- performance, evita re-rendezirações desnecessárias, como acontece com uso de onChange;
+- simplicidade, por meio do uso de hooks;
+- menos código, por não usar `useState` para cada campo 
+
+<b>Principais usos:</b>
+`register`: Ele registra um campo dentro do formulário, conectando-o ao sistema de coleta de dados e validação do react-hook-form, respeitando os tipos definidos no seu useForm<T>().
+
+```
+type FormData = {
+  name: string;
+  phone: string;
+};
+
+<input {...register('name')} />
+<input {...register('phone')} />
+```
+
+`handleSubmit`: É um validador automático, verifica se há validações e as realiza se houver, coleta todos os campos registrados no `register`, chama a função de callback e envia os dados.
+
+```
+const onSubmit = (data: FormData) => {
+  console.log('Dados enviados:', data);
+};
+
+<form onSubmit={handleSubmit(onSubmit)}>
+  <input {...register('name')} />
+  <button type="submit">Enviar</button>
+</form>
+
+// O handleSubmit verificará anyes de enviar se há validações, neste caso não há, e se foram coletados todos os register
+```
+
+> <code>handleSubmit</code> é quem faz a ponte entre o formulário visível e os dados organizados e validados — ele precisa saber o que fazer com os dados, e isso vem da função que você passa.
+
+`watch`: O watch serve para observar os valores de um ou mais campos em tempo real — ou seja, ele escuta mudanças no formulário sem precisar usar useState ou criar funções onChange.
+
+```
+// Observar todos os campos
+const formValues = watch(); 
+console.log(formValues); // { name: '', email: '', ... }
+
+// Observar campo específico
+const nameValue = watch('name');
+
+// Observar múltiplos campos
+const [name, email] = watch(['name', 'email']);
+```
+
+> Usar watch() para muitos campos em grandes formulários — pode gerar re-renderizações desnecessárias.
+> Usar apenas quando precisar ver o valor “ao vivo”, como no caso para habilitar o botão de envio.
+
+`Controller`: Usado para lidar com tipos de inputs costumizados, externos ao HTML nativo. Pois o register não tem uma referência deste tipo de input e assim não consegue "conversar" muito bem com o componente.
+
+```
+<Controller
+  name="phone"
+  control={control}
+  render={({ field }) => (
+    <InputMask
+      mask="(99) 99999-9999"
+      {...field}
+    >
+      {(inputProps) => <input {...inputProps} />}
+    </InputMask>
+  )}
+/>
+```
+
+Dentro de render() está o que será renderizado ou seja o componente externo.
+
+`formState.errors`: É um objeto do React Hook Form que guarda os erros de validação dos campos do formulário.
+
+Estrutura do Errors:
+```
+errors = {
+  nomeDoCampo: {
+    type: 'required' | 'pattern' | 'minLength' | etc,
+    message: 'Mensagem de erro definida'
+  }
+}
+```
+
+Exemplo de uso:
+
+```
+const {
+  register,
+  handleSubmit,
+  formState: { errors }
+} = useForm<FormData>();
+
+<input
+  {...register('email', {
+    required: 'Email é obrigatório',
+    pattern: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: 'Formato de email inválido',
+    }
+  })}
+/>
+{errors.email && <span>{errors.email.message}</span>}
+```

@@ -10,18 +10,16 @@ import {
   buttonStyle,
 } from './style/constFormStyles';
 
-// useForm gerência os forms e o Controller lida com inputs customizados que não são nativos do HTML
-import { useForm, Controller } from 'react-hook-form';
-// InputMask da lib com atualizações que rodam no React +18
-import InputMask from 'react-input-mask-next';
+// Importando o useForm o hook a ser utlizado como gerênciador do FormMultiset
+import { useForm } from 'react-hook-form';
 
-// Type para os dados do form
+
+// Tipo de dados do form
 type FormData = {
   name: string;
   lastName: string;
   email: string;
   phone: string;
-  cpf: string;
 };
 
 const FormMultiset = () => {
@@ -30,31 +28,40 @@ const FormMultiset = () => {
     'personal',
   );
 
-  // Estado que guarda os dados dos inputs
-  const [formData, setFormData] = React.useState<FormData>({
-    name: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    cpf: '',
+  // Inicializando o useForm com os tipos de dados do form, definindo valores padrão
+  // Chamando do useForm as funcionalidades register, handleSubmit e watch necessárias para gerenciamento
+  const {
+    register,
+    handleSubmit,
+    watch, 
+  } = useForm<FormData>({
+    defaultValues: {
+      name: '',
+      lastName: '',
+      email: '',
+      phone: ''
+    },
   });
 
-  // Realiza a mudança do estado do form para exibir os campos de dados pessoais
+  // Função que realiza a mudança do estado do form para exibir os campos de dados pessoais
   const handleDisplayPersonalForm = () => {
     setDisplayForm('personal');
   };
 
-  // Realiza a mudança do estado do form para exibir os campos de dados de contato
+  // Função que realiza a mudança do estado do form para exibir os campos de dados de contato
   const handleDisplayContactForm = () => {
     setDisplayForm('contact');
   };
 
-  // Verifica se todos os campos necessários estão preenchidos para habilitar o botão de submissão
+  // Usando o watch para observar os valores do formulário completo em tempo real
+  const formValues = watch();
+
+  // Verificando se todos os campos necessários estão preenchidos para habilitar o botão de submissão, 
   const isReadyToSubmit =
-    formData.name !== '' &&
-    formData.lastName !== '' &&
-    formData.email !== '' &&
-    formData.phone !== '' &&
+    formValues.name !== '' &&
+    formValues.lastName !== '' &&
+    formValues.email !== '' &&
+    formValues.phone !== '' &&
     displayForm === 'contact';
 
   // Função chamada para submissão dos dados
@@ -62,71 +69,44 @@ const FormMultiset = () => {
     console.log('Dados enviados:', data);
   };
 
-  // inicializando o react-hook-form para atender aos tipos, a cara que meus dados terão
-  const { control, handleSubmit } = useForm<FormData>();
-
-  // Parei aqui, tenho que modificar os containers para <form>
+  // Parei aqui, modifiquei os componentes form mas preciso saber se preciso disso mesmo, coisa complicada
   return (
     <div css={containerForm}>
-      <div css={formStyle}>
+      <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
         {/* Gerenciando através do estados do form quais campos estarão disponíveis para o user */}
         {displayForm === 'personal' && (
-          <form>
+          <>
             <input
-              value={formData.name}
-              onChange={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  name: e.target.value,
-                }))
-              }
+              {...register('name')}
               css={inputStyle}
               type="text"
               placeholder="Nome"
             />
             <input
-              value={formData.lastName}
-              onChange={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  lastName: e.target.value,
-                }))
-              }
+              {...register('lastName')}
               css={inputStyle}
               type="text"
               placeholder="Sobrenome"
             />
-          </form>
+          </>
         )}
         {displayForm === 'contact' && (
-          <form>
+          <>
             <input
-              value={formData.email}
-              onChange={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  email: e.target.value,
-                }))
-              }
+              {...register('email')}
               css={inputStyle}
               type="e-mail"
               placeholder="Email"
             />
             <input
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  phone: e.target.value,
-                }))
-              }
+              {...register('phone')}
               css={inputStyle}
-              type="text"
-              placeholder="Telefone"
+              type="phone"
+              placeholder="(99) 99999-9999"
             />
-          </form>
+          </>
         )}
-      </div>
+      </form>
       {/* Botões para alternar entre os formulários */}
       <div css={containerButton}>
         <button css={buttonStyle} onClick={handleDisplayPersonalForm}>
@@ -138,7 +118,7 @@ const FormMultiset = () => {
       </div>
       <div>
         {/* Botão para submeter os dados, só aparece quando todos os campos estão preenchidos */}
-        {isReadyToSubmit && <button css={buttonStyle}>Submeter Dados</button>}
+        {isReadyToSubmit && <button type='submit' onClick={handleSubmit(onSubmit)} css={buttonStyle}>Submeter Dados</button>}
       </div>
     </div>
   );
