@@ -4,14 +4,14 @@ import { css } from '@emotion/react';
 export const containerForm = css`
   display: flex;
   flex-direction: column;
-  width: 500px;
-  height: 400px;
-  background-color: blueviolet;
-  justify-content: center;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(34, 34, 34, 1);
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  border-radius: 15px;
+  border-radius: 16px;
+  padding-bottom: 1rem;
 `;
 
 export const formStyle = css`
@@ -22,35 +22,46 @@ export const formStyle = css`
 `;
 
 export const inputStyle = css`
-  width: 100%;
+  width: 250px;
+  height: 30px;
   padding: 0.5rem;
   margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 300px;
+  background-color: rgba(23, 23, 23, 1);
+  border: 1px solid rgb(96, 96, 96);
+  border-radius: 8px;
   outline: none;
+  color : #FDFDFD;
 `;
 
-export const containerButton = css`
+export const tabSwitcher = css`
   display: flex;
-  justify-content: center;
+  box-sizing: border-box;
+  justify-content: space-between;
   align-items: center;
   width: 300px;
-  gap: 1rem;
+  height: 50px;
+  padding: 6px;
+  gap: 10px;
+  border-radius: 16px 16px 0px 0px;
+  background-color: rgba(96, 96, 96, 1);
 `;
 
 export const buttonStyle = css`
-  padding: 0.5rem 1rem;
-  background-color: beige;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  padding: 10px 12px;
+  width: 140px;
+  height: auto;
+  background-color:  rgba(23, 23, 23, 1);
+  color: #FDFDFD;
+  border: 1px solid rgb(96, 96, 96);
+  border-radius: 8px;
   cursor: pointer;
   outline: none;
-  color: darkslateblue;
 
   &:hover {
-    background-color: gainsboro;
+    background-color: rgba(23, 23, 23, 1);
   }
 `;
 
+export const activeButtonStyle = css`
+  background-color:  rgba(96, 96, 96, 1);
+`;

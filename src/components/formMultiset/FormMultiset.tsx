@@ -6,8 +6,9 @@ import {
   containerForm,
   formStyle,
   inputStyle,
-  containerButton,
+  tabSwitcher,
   buttonStyle,
+  activeButtonStyle,
 } from './style/constFormStyles';
 
 // Importando o useForm o hook a ser utlizado como gerênciador do FormMultiset
@@ -21,6 +22,7 @@ type FormData = {
   email: string;
   phone: string;
 };
+
 
 const FormMultiset = () => {
   // Estado que controla quais campos serão mostrados no componente
@@ -72,6 +74,14 @@ const FormMultiset = () => {
   // Parei aqui, modifiquei os componentes form mas preciso saber se preciso disso mesmo, coisa complicada
   return (
     <div css={containerForm}>
+      <div css={tabSwitcher}>
+          <button css={[buttonStyle, displayForm === 'personal' && activeButtonStyle]} onClick={handleDisplayPersonalForm}>
+            Login
+          </button>
+          <button css={[buttonStyle, displayForm === 'contact' && activeButtonStyle]} onClick={handleDisplayContactForm}>
+            Cadastro
+          </button>
+      </div>
       <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
         {/* Gerenciando através do estados do form quais campos estarão disponíveis para o user */}
         {displayForm === 'personal' && (
@@ -107,15 +117,7 @@ const FormMultiset = () => {
           </>
         )}
       </form>
-      {/* Botões para alternar entre os formulários */}
-      <div css={containerButton}>
-        <button css={buttonStyle} onClick={handleDisplayPersonalForm}>
-          Dados Pessoais
-        </button>
-        <button css={buttonStyle} onClick={handleDisplayContactForm}>
-          Dados de Contato
-        </button>
-      </div>
+      
       <div>
         {/* Botão para submeter os dados, só aparece quando todos os campos estão preenchidos */}
         {isReadyToSubmit && <button type='submit' onClick={handleSubmit(onSubmit)} css={buttonStyle}>Submeter Dados</button>}
@@ -125,3 +127,8 @@ const FormMultiset = () => {
 };
 
 export default FormMultiset;
+
+// Componente mais generalizado (temos várias páginas com essa mesma configuração mas que coletam dados diferentes)
+// Definir os tipos de dados que serão coletados
+// Login => FormLogin {email:string, password:string}
+// Cadastro => FormRegister {name:string, cpf:string, born:Date, cargo:boolean, email:string, password:string}
